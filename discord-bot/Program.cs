@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using discord_bot;
 
 class Program
 {
@@ -98,7 +99,7 @@ class Program
     {
         // Repeat this for all the service classes
         // and other dependencies that your commands might need.
-        //_map.AddSingleton(new SomeServiceClass());
+        _map.AddSingleton(new com_deps());
 
         // When all your required services are in the collection, build the container.
         // Tip: There's an overload taking in a 'validateScopes' bool to make sure
@@ -107,7 +108,7 @@ class Program
 
         // Either search the program and add all Module classes that can be found.
         // Module classes *must* be marked 'public' or they will be ignored.
-        //await _commands.AddModulesAsync(Assembly.GetEntryAssembly());
+        await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
         // Or add Modules manually if you prefer to be a little more explicit:
         //await _commands.AddModuleAsync<SomeModule>();
 
@@ -138,8 +139,11 @@ class Program
 
             // Uncomment the following lines if you want the bot
             // to send a message if it failed (not advised for most situations).
-            //if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
-            //    await msg.Channel.SendMessageAsync(result.ErrorReason);
+            if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
+            {
+                await msg.Channel.SendMessageAsync(result.ErrorReason);
+            }
+
         }
     }
 }
