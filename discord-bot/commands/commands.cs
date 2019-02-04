@@ -6,6 +6,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using discord_bot;
+using System.Net;
 
 namespace discord_bot.commands
 {
@@ -17,6 +18,17 @@ namespace discord_bot.commands
         {
             // ReplyAsync is a method on ModuleBase
             await ReplyAsync(echo);
+        }
+
+        //TODO create ow module group       
+        [Command("ow"), Summary("Retrieves stats given a tag.")]
+        public async Task OverwatchStats([Summary("The player to search")] string user)
+        {
+            WebClient web = new WebClient();
+            string stats = web.DownloadString($"https://ow-api.com/v1/stats/pc/us/{user}/profile");
+            //TODO format data
+            // ReplyAsync is a method on ModuleBase
+            await ReplyAsync(stats);
         }
     }
 
